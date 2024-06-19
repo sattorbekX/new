@@ -54,7 +54,7 @@ class TelegramMailer implements ShouldQueue
                 self::$mail_sent++;
             } catch (\Throwable $e) {
                 self::$mail_failed++;
-                Log::error('Failed to send message to user ' . $user->user_id . ': ' . $e->getMessage());
+                Log::error($e->getMessage());
             }
         }
 
@@ -62,11 +62,11 @@ class TelegramMailer implements ShouldQueue
             Telegram::editMessageText(
                 chat_id: $mail_creator_id,
                 message_id: $notification_message_id,
-                text: "Sending message... (Sent: " . self::$mail_sent . ", Failed: " . self::$mail_failed . ")",
+                text: "Yuborilmoqda... (Bajaildi: " . self::$mail_sent . ", Xato: " . self::$mail_failed . ")",
                 parse_mode: ParseMode::HTML
             );
         } catch (\Throwable $e) {
-            Log::error('Failed to edit message: ' . $e->getMessage());
+            Log::error($e->getMessage());
         }
 
         $nextOffset = $offset + $limit;
@@ -80,11 +80,11 @@ class TelegramMailer implements ShouldQueue
             try {
                 Telegram::sendMessage(
                     chat_id: $mail_creator_id,
-                    text: "Successfully sent.\n\nSent: " . self::$mail_sent . ", Failed: " . self::$mail_failed,
+                    text: "Tugadi.\n\nBajarildi: " . self::$mail_sent . ", Xato: " . self::$mail_failed,
                     parse_mode: ParseMode::HTML
                 );
             } catch (\Throwable $e) {
-                Log::error('Failed to send final message: ' . $e->getMessage());
+                Log::error($e->getMessage());
             }
         }
     }
